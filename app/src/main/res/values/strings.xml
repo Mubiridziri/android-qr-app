@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name" translatable="false">QRSCNR</string>
+    <string name="title_home">Home</string>
+    <string name="title_stored">Stored Links</string>
+    <string name="title_settings">Settings</string>
+    <string name="take_barcode_picture">Take QR-code</string>
+    <string name="scan_barcode">Scan QR-code</string>
+    <string name="launch_link">Go to link</string>
+    <string name="open_email">Send Email</string>
+    <string name="wifi_connect">Connect to Wi-Fi</string>
+    <string name="cancel">Cancel</string>
+    <string name="alert_url_ok">Go To Link</string>
+    <string name="email_isnt_supported">Email QR-codes isn\'t supported</string>
+    <string name="wifi_isnt_supported">Wi-Fi QR-codes isn\'t supported</string>
+    <string name="qr_code">QR-code</string>
+    <string name="link_found">Link Found</string>
+    <string name="unable_recognize">Unable To Recognize Code</string>
+    <string name="error_open_camera">Error Open Camera</string>
+</resources>
