@@ -16,4 +16,5 @@
     <string name="link_found">Найдена ссылка</string>
     <string name="unable_recognize">Невозможно распознать код</string>
     <string name="error_open_camera">Ошибка открытия камеры</string>
+    <string name="main_title_text">Сохраняй отсканированные коды, с помощью приложения, чтобы иметь к ним доступ потом.</string>
 </resources>

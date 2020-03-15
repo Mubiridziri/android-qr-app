@@ -3,6 +3,7 @@ package com.mubiridziri.qrscnr;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.room.Room;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -15,11 +16,15 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.mubiridziri.qrscnr.appdatabase.AppDatabase;
+import com.mubiridziri.qrscnr.entity.Link;
+import com.mubiridziri.qrscnr.repository.LinkRepository;
 
 import java.io.IOException;
 
@@ -34,7 +39,7 @@ public class ScannerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //back button
+        //getActionBar().setDisplayHomeAsUpEnabled(true); //back button
 
         initViews();
     }
@@ -92,6 +97,7 @@ public class ScannerActivity extends AppCompatActivity {
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0) {
+                    //Need learn about it operation
                     txtBarcodeValue.post(new Runnable() {
 
                         @Override
@@ -102,16 +108,29 @@ public class ScannerActivity extends AppCompatActivity {
                                 sendToast(R.string.wifi_isnt_supported);
                             } else if (barcodes.valueAt(0).url != null) {
                                 cameraSource.stop();
+                                final String urlPath = barcodes.valueAt(0).displayValue;
                                 AlertDialog.Builder alertDialog = getDialogView();
                                 alertDialog.setTitle(R.string.qr_code);
                                 alertDialog.setMessage(barcodes.valueAt(0).displayValue);
                                 alertDialog.setPositiveButton(R.string.alert_url_ok, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(barcodes.valueAt(0).displayValue)));
+                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(urlPath)));
                                     }
                                 });
                                 sendToast(R.string.link_found);
                                 AlertDialog dialog = alertDialog.create();
+                                Thread databaseThread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                                                AppDatabase.class, "qrscnr").build();
+                                        LinkRepository linkRepository = db.getLinkRepository();
+                                        Link link = new Link();
+                                        link.url = urlPath;
+                                        linkRepository.insertAll(link);
+                                    }
+                                });
+                                databaseThread.start();
                                 dialog.show();
 
                             } else sendToast(R.string.unable_recognize);

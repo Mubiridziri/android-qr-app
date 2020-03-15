@@ -16,28 +16,11 @@ import com.mubiridziri.qrscnr.ScannerActivity;
 
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
-    Button btnTakePicture, btnScanBarcode;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
+        HomeViewModel homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        initEvents(root);
 
         return root;
-    }
-
-    public void initEvents(View view) {
-
-        btnScanBarcode = view.findViewById(R.id.btnScanBarcode);
-
-        btnScanBarcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), ScannerActivity.class));
-            }
-        });
     }
 }
