@@ -1,4 +1,4 @@
-package com.mubiridziri.qrscnr.ui.home;
+package com.mubiridziri.qrscnr.ui.main_page;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

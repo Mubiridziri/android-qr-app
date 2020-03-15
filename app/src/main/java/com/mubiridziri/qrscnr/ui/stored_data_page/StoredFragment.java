@@ -1,19 +1,12 @@
-package com.mubiridziri.qrscnr.ui.dashboard;
+package com.mubiridziri.qrscnr.ui.stored_data_page;
 
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -24,12 +17,9 @@ import com.mubiridziri.qrscnr.appdatabase.AppDatabase;
 import com.mubiridziri.qrscnr.entity.Link;
 import com.mubiridziri.qrscnr.repository.LinkRepository;
 
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
-public class DashboardFragment extends Fragment {
+public class StoredFragment extends Fragment {
 
     public RecyclerView storedView;
     public RecyclerView.Adapter adapter;

@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.mubiridziri.qrscnr.ui.home.HomeFragment"
+        android:name="com.mubiridziri.qrscnr.ui.main_page.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.mubiridziri.qrscnr.ui.dashboard.DashboardFragment"
+        android:name="com.mubiridziri.qrscnr.ui.stored_data_page.StoredFragment"
         android:label="@string/title_stored"
         tools:layout="@layout/fragment_stored" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.mubiridziri.qrscnr.ui.notifications.NotificationsFragment"
+        android:name="com.mubiridziri.qrscnr.ui.settings_page.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>
