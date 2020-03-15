@@ -11,7 +11,7 @@ import java.util.List;
 
 @Dao
 public interface LinkRepository {
-    @Query("SELECT * FROM link")
+    @Query("SELECT * FROM link ORDER BY uid DESC")
     List<Link> getAll();
 
     @Query("SELECT * FROM link WHERE uid IN (:linkUids)")
