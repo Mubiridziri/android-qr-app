@@ -128,6 +128,7 @@ public class ScannerActivity extends AppCompatActivity {
                                         Link link = new Link();
                                         link.url = urlPath;
                                         linkRepository.insertAll(link);
+                                        db.close();
                                     }
                                 });
                                 databaseThread.start();

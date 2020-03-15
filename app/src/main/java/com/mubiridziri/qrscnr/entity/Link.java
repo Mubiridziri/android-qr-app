@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 public class Link {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int uid;
 
     @ColumnInfo(name = "url_path")
