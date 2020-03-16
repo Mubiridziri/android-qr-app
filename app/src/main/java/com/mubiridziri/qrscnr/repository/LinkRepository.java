@@ -5,23 +5,23 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.mubiridziri.qrscnr.entity.Link;
+import com.mubiridziri.qrscnr.entity.StoredData;
 
 import java.util.List;
 
 @Dao
 public interface LinkRepository {
-    @Query("SELECT * FROM link ORDER BY uid DESC")
-    List<Link> getAll();
+    @Query("SELECT * FROM StoredData ORDER BY uid DESC")
+    List<StoredData> getAll();
 
-    @Query("SELECT * FROM link WHERE uid IN (:linkUids)")
-    List<Link> loadAllByIds(int[] linkUids);
+    @Query("SELECT * FROM StoredData WHERE uid IN (:linkUids)")
+    List<StoredData> loadAllByIds(int[] linkUids);
 
     @Insert
-    void insertAll(Link... users);
+    void insertAll(StoredData... users);
 
     @Delete
-    void delete(Link user);
+    void delete(StoredData user);
 }
 
 

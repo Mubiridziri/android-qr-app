@@ -1,10 +1,5 @@
 package com.mubiridziri.qrscnr;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.room.Room;
-
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,24 +11,31 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.room.Room;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.mubiridziri.qrscnr.appdatabase.AppDatabase;
-import com.mubiridziri.qrscnr.entity.Link;
+import com.mubiridziri.qrscnr.entity.StoredData;
 import com.mubiridziri.qrscnr.repository.LinkRepository;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.IOException;
 
 public class ScannerActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CAMERA_PERMISSION = 201;
     SurfaceView surfaceView;
     TextView txtBarcodeValue;
     private CameraSource cameraSource;
-    private static final int REQUEST_CAMERA_PERMISSION = 201;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,9 +127,19 @@ public class ScannerActivity extends AppCompatActivity {
                                         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                                                 AppDatabase.class, "qrscnr").build();
                                         LinkRepository linkRepository = db.getLinkRepository();
-                                        Link link = new Link();
-                                        link.url = urlPath;
-                                        linkRepository.insertAll(link);
+                                        StoredData storedData = new StoredData();
+                                        Document doc = null; // Fetches the HTML document
+                                        try {
+                                            doc = Jsoup.connect(urlPath).get();
+                                        } catch (IOException e) {
+                                            storedData.title = "Страница недоступна";
+                                        }
+                                        if (doc != null) {
+                                            storedData.title = doc.title();
+                                        } else storedData.title = "Страница недоступна";
+                                        storedData.content = urlPath;
+                                        storedData.type = "url";
+                                        linkRepository.insertAll(storedData);
                                         db.close();
                                     }
                                 });

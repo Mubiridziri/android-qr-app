@@ -12,18 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mubiridziri.qrscnr.R;
-import com.mubiridziri.qrscnr.entity.Link;
+import com.mubiridziri.qrscnr.entity.StoredData;
 
 import java.util.List;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 public class LinkAdapter extends RecyclerView.Adapter<LinkAdapter.ViewHolder>{
 
-    List<Link> linkList;
+    private List<StoredData> storedDataList;
 
-    public LinkAdapter(List<Link> linkList) {
-        this.linkList = linkList;
+    public LinkAdapter(List<StoredData> storedDataList) {
+        this.storedDataList = storedDataList;
     }
 
     @NonNull
@@ -35,19 +33,22 @@ public class LinkAdapter extends RecyclerView.Adapter<LinkAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull LinkAdapter.ViewHolder holder, int position) {
-        holder.url_path.setText(linkList.get(position).url);
+        holder.title.setText(storedDataList.get(position).title);
+        holder.url_path.setText(storedDataList.get(position).content);
     }
 
     @Override
     public int getItemCount() {
-        return this.linkList.size();
+        return this.storedDataList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView url_path;
-        public Button linkButton;
-        public ViewHolder(@NonNull final View itemView) {
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView title;
+        TextView url_path;
+        Button linkButton;
+        ViewHolder(@NonNull final View itemView) {
             super(itemView);
+            title = itemView.findViewById(R.id.title);
             url_path = itemView.findViewById(R.id.url_path);
             linkButton = itemView.findViewById(R.id.launch_link_button);
             linkButton.setOnClickListener(new View.OnClickListener() {

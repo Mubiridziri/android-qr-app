@@ -7,16 +7,16 @@
 ##############################################################################
 
 # Attempt to set APP_HOME
-# Resolve links: $0 may be a link
+# Resolve links: $0 may be a storedData
 PRG="$0"
 # Need this for relative symlinks.
 while [ -h "$PRG" ]; do
   ls=$(ls -ld "$PRG")
-  link=$(expr "$ls" : '.*-> \(.*\)$')
-  if expr "$link" : '/.*' >/dev/null; then
-    PRG="$link"
+  storedData=$(expr "$ls" : '.*-> \(.*\)$')
+  if expr "$storedData" : '/.*' >/dev/null; then
+    PRG="$storedData"
   else
-    PRG=$(dirname "$PRG")"/$link"
+    PRG=$(dirname "$PRG")"/$storedData"
   fi
 done
 SAVED="$(pwd)"
