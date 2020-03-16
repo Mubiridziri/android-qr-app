@@ -2,9 +2,7 @@ package com.mubiridziri.qrscnr;
 
 import android.Manifest;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
@@ -23,7 +21,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.mubiridziri.qrscnr.appdatabase.AppDatabase;
 import com.mubiridziri.qrscnr.entity.StoredData;
-import com.mubiridziri.qrscnr.repository.LinkRepository;
+import com.mubiridziri.qrscnr.repository.StoredDataRepository;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -111,48 +109,82 @@ public class ScannerActivity extends AppCompatActivity {
                             } else if (barcodes.valueAt(0).url != null) {
                                 cameraSource.stop();
                                 final String urlPath = barcodes.valueAt(0).displayValue;
-                                AlertDialog.Builder alertDialog = getDialogView();
-                                alertDialog.setTitle(R.string.qr_code);
-                                alertDialog.setMessage(barcodes.valueAt(0).displayValue);
-                                alertDialog.setPositiveButton(R.string.alert_url_ok, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(urlPath)));
-                                    }
-                                });
-                                sendToast(R.string.link_found);
-                                AlertDialog dialog = alertDialog.create();
-                                Thread databaseThread = new Thread(new Runnable() {
+                                final Thread databaseThread = new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                                                AppDatabase.class, "qrscnr").build();
-                                        LinkRepository linkRepository = db.getLinkRepository();
-                                        StoredData storedData = new StoredData();
-                                        Document doc = null; // Fetches the HTML document
-                                        try {
-                                            doc = Jsoup.connect(urlPath).get();
-                                        } catch (IOException e) {
-                                            storedData.title = "Страница недоступна";
-                                        }
-                                        if (doc != null) {
-                                            storedData.title = doc.title();
-                                        } else storedData.title = "Страница недоступна";
-                                        storedData.content = urlPath;
-                                        storedData.type = "url";
-                                        linkRepository.insertAll(storedData);
-                                        db.close();
+                                        saveRecognizedEntity(urlPath, StoredData.URL_TYPE);
                                     }
                                 });
-                                databaseThread.start();
-                                dialog.show();
+                                AlertDialog.Builder alertDialog = getAlertDialogBuilder(urlPath);
+                                alertDialog.setPositiveButton(R.string.save_button, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        databaseThread.start();
+                                    }
+                                });
+                                showAlertDialog(alertDialog);
 
-                            } else sendToast(R.string.unable_recognize);
+                            } else {
+                                cameraSource.stop();
+                                final String content = barcodes.valueAt(0).displayValue;
+                                final Thread databaseThread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        saveRecognizedEntity(content, StoredData.TEXT_TYPE);
+                                    }
+                                });
+                                AlertDialog.Builder alertDialog = getAlertDialogBuilder(content);
+                                alertDialog.setPositiveButton(R.string.save_button, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        databaseThread.start();
+                                    }
+                                });
+                                showAlertDialog(alertDialog);
+                            }
                         }
                     });
 
                 }
             }
         });
+    }
+
+    private AlertDialog.Builder getAlertDialogBuilder(String content) {
+        AlertDialog.Builder alertDialog = getDialogView();
+        alertDialog.setTitle(R.string.qr_code);
+        alertDialog.setMessage(content);
+        return alertDialog;
+    }
+
+    private void showAlertDialog(AlertDialog.Builder builder) {
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void saveRecognizedEntity(String content, String type) {
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "qrscnr").build();
+        StoredDataRepository storedDataRepository = db.getLinkRepository();
+        StoredData storedData = new StoredData();
+
+        if(type.equals(StoredData.URL_TYPE)) {
+            Document doc = null; // Fetches the HTML document
+            try {
+                doc = Jsoup.connect(content).get();
+            } catch (IOException e) {
+                storedData.title = "Страница недоступна";
+            }
+            if (doc != null) {
+                storedData.title = doc.title();
+            } else storedData.title = "Страница недоступна";
+            storedData.type = StoredData.URL_TYPE;
+        } else {
+            storedData.title = getResources().getString(R.string.the_note_title);
+            storedData.type = StoredData.TEXT_TYPE;
+        }
+        storedData.content = content;
+
+        storedDataRepository.insertAll(storedData);
+        db.close();
     }
 
     @Override

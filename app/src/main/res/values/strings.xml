@@ -17,4 +17,7 @@
     <string name="unable_recognize">Unable To Recognize Code</string>
     <string name="error_open_camera">Error Open Camera</string>
     <string name="main_title_text">Save the scanned codes using the application so that you can access them later.</string>
+    <string name="save_button">Save</string>
+    <string name="the_note_title">The Note</string>
+    <string name="open_text">Show Full Text</string>
 </resources>

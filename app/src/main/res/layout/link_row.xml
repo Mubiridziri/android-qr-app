@@ -40,13 +40,15 @@
                 android:singleLine="true" />
 
             <Button
-                android:id="@+id/launch_link_button"
+                android:id="@+id/launch_button"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
                 android:drawableStart="@drawable/open_link_icon"
-                android:text="@string/launch_link" />
+                android:text="@string/launch_link"
+                android:visibility="invisible"
+                />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

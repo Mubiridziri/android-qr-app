@@ -7,6 +7,9 @@ import androidx.room.PrimaryKey;
 @Entity
 public class StoredData {
 
+    public static String URL_TYPE = "url";
+    public static String TEXT_TYPE = "text";
+
     @PrimaryKey(autoGenerate = true)
     public int uid;
 

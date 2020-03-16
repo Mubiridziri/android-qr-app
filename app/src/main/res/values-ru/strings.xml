@@ -17,4 +17,7 @@
     <string name="unable_recognize">Невозможно распознать код</string>
     <string name="error_open_camera">Ошибка открытия камеры</string>
     <string name="main_title_text">Сохраняй отсканированные коды, с помощью приложения, чтобы иметь к ним доступ потом.</string>
+    <string name="save_button">Сохранить</string>
+    <string name="the_note_title">Заметка</string>
+    <string name="open_text">Открыть текст</string>
 </resources>

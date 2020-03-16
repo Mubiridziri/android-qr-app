@@ -10,7 +10,7 @@ import com.mubiridziri.qrscnr.entity.StoredData;
 import java.util.List;
 
 @Dao
-public interface LinkRepository {
+public interface StoredDataRepository {
     @Query("SELECT * FROM StoredData ORDER BY uid DESC")
     List<StoredData> getAll();
 

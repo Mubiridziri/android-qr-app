@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.mubiridziri.qrscnr.R;
-import com.mubiridziri.qrscnr.adapter.LinkAdapter;
+import com.mubiridziri.qrscnr.adapter.StoredDataAdapter;
 import com.mubiridziri.qrscnr.appdatabase.AppDatabase;
 import com.mubiridziri.qrscnr.entity.StoredData;
-import com.mubiridziri.qrscnr.repository.LinkRepository;
+import com.mubiridziri.qrscnr.repository.StoredDataRepository;
 
 import java.util.List;
 
@@ -35,8 +35,8 @@ public class StoredFragment extends Fragment {
             public void run() {
                 AppDatabase db = Room.databaseBuilder(getContext(),
                         AppDatabase.class, "qrscnr").build();
-                LinkRepository linkRepository = db.getLinkRepository();
-                 listStoredData = linkRepository.getAll();
+                StoredDataRepository storedDataRepository = db.getLinkRepository();
+                 listStoredData = storedDataRepository.getAll();
                 db.close();
 
             }
@@ -54,7 +54,7 @@ public class StoredFragment extends Fragment {
             else break;
         }
 
-        RecyclerView.Adapter adapter = new LinkAdapter(listStoredData);
+        RecyclerView.Adapter adapter = new StoredDataAdapter(listStoredData);
         storedView.setAdapter(adapter);
 
         return root;
