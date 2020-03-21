@@ -6,6 +6,7 @@ Android App for recognize QR-codes (with help GMS Vision)
 ### Now supports QR types
 
 * URL Links
+* Text 
 
 ### Support planned
 
